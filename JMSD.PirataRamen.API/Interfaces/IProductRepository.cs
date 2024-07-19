@@ -6,8 +6,8 @@ namespace JMSD.PirataRamen.API.Interfaces
     {
         Task<IEnumerable<Product>> GetProductsAsync();
         Task<Product> GetProductByIdAsync(int id);
-        Task<Product> CreateProductAsync(Product product);
-        Task<Product> UpdateProductAsync(Product product);
-        Task<Product> DeleteProductAsync(int id);
+        Task<int> CreateProductAsync(Product product);
+        Task<int> UpdateProductAsync(Product product);
+        Task<int> DeleteProductAsync(int id);
     }
 }

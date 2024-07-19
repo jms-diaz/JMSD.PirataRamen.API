@@ -1,4 +1,6 @@
 ﻿using JMSD.PirataRamen.API.Interfaces;
+using JMSD.PirataRamen.API.Models;
+using JMSD.PirataRamen.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JMSD.PirataRamen.API.Controllers
@@ -42,6 +44,70 @@ namespace JMSD.PirataRamen.API.Controllers
             {
                 return StatusCode(500, ex.Message);
                 throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCategoryAsync([FromBody] Category category)
+        {
+            try
+            {
+                var result = await _categoryService.CreateCategoryAsync(category);
+                if (result > 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategoryAsync([FromBody] Category category)
+        {
+            try
+            {
+                var result = await _categoryService.UpdateCategoryAsync(category);
+                if (result > 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteCategoryAsync([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _categoryService.DeleteCategoryAsync(id);
+                if (result > 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

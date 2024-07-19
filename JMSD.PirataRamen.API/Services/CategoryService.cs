@@ -39,19 +39,43 @@ namespace JMSD.PirataRamen.API.Services
             }
         }
 
-        public Task<Category> CreateCategoryAsync(Category category)
+        public async Task<int> CreateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _categoryRepository.CreateCategoryAsync(category);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Task<Category> UpdateCategoryAsync(Category category)
+        public async Task<int> UpdateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _categoryRepository.CreateCategoryAsync(category);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Task<Category> DeleteCategoryAsync(int id)
+        public async Task<int> DeleteCategoryAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _categoryRepository.DeleteCategoryAsync(id);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

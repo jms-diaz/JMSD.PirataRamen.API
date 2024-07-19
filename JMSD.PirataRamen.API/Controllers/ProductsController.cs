@@ -1,7 +1,6 @@
-﻿using JMSD.PirataRamen.API.Context;
-using JMSD.PirataRamen.API.Interfaces;
+﻿using JMSD.PirataRamen.API.Interfaces;
+using JMSD.PirataRamen.API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ApiExplorer;
 
 namespace JMSD.PirataRamen.API.Controllers
 {
@@ -38,6 +37,70 @@ namespace JMSD.PirataRamen.API.Controllers
             {
                 var product = await _productService.GetProductByIdAsync(id);
                 return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProductAsync([FromBody] Product product)
+        {
+            try
+            {
+                var result = await _productService.CreateProductAsync(product);
+                if (result > 0)
+                {
+                    return Ok();
+                } 
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateProductAsync([FromBody] Product product)
+        {
+            try
+            {
+                var result = await _productService.UpdateProductAsync(product);
+                if (result > 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteProductAsync([FromRoute] int id)
+        {
+            try
+            {
+                var result = await _productService.DeleteProductAsync(id);
+                if (result > 0)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception ex)
             {

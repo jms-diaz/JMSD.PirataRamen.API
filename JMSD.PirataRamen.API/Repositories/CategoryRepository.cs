@@ -18,7 +18,7 @@ namespace JMSD.PirataRamen.API.Repositories
         {
             try
             {
-                var sql = "SELECT CategoryId, Name FROM Category";
+                var sql = "SELECT CategoryId, Name FROM Categories";
 
                 using (var connection = _context.CreateConnection())
                 {
@@ -38,7 +38,7 @@ namespace JMSD.PirataRamen.API.Repositories
         {
             try
             {
-                var sql = @"SELECT CategoryId, Name FROM CATEGORY
+                var sql = @"SELECT CategoryId, Name FROM Categories
                         WHERE CategoryId = @CategoryId";
 
                 using (var connection = _context.CreateConnection())
@@ -53,19 +53,62 @@ namespace JMSD.PirataRamen.API.Repositories
             }
         }
 
-        public Task<Category> CreateCategoryAsync(Category category)
+        public async Task<int> CreateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sql = @"INSERT INTO Categories (Name) 
+                    VALUES @Name";
+
+                using (var connection = _context.CreateConnection())
+                {
+                    var result = await connection.ExecuteAsync(sql, category);
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Task<Category> UpdateCategoryAsync(Category category)
+        public async Task<int> UpdateCategoryAsync(Category category)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sql = @"UPDATE Categories SET
+                    Name = @Name
+                    UpdatedDate = @UpdatedDate";
+
+                using (var connection = _context.CreateConnection())
+                {
+                    var result = await connection.ExecuteAsync(sql, new { Name = category.Name, UpdatedDate = DateTime.Now});
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public Task<Category> DeleteCategoryAsync(int id)
+        public async Task<int> DeleteCategoryAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var sql = @"DELETE FROM Categories
+                        WHERE CategoryId = @CategoryId";
+
+                using (var connection = _context.CreateConnection())
+                {
+                    var result = await connection.ExecuteAsync(sql, new { CategoryId = id});
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

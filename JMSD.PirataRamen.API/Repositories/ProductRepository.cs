@@ -7,19 +7,20 @@ namespace JMSD.PirataRamen.API.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        //private readonly ILogger _logger;
         private readonly PirataRamenContext _context;
 
         public ProductRepository(PirataRamenContext context)
         {
             _context = context;
-            //_logger = logger;
         }
 
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            var sql = @"SELECT ProductId, Name, Description, Price, ImageUrl
-                    FROM Product";
+            var sql = @"SELECT p.ProductId, p.Name, p.Description, p.Price, p.ImageUrl, c.CategoryId, c.Name AS Category
+                    FROM Products p
+                    LEFT JOIN Categories c
+                    ON c.CategoryId = p.CategoryId
+                ";
 
             using (var connection = _context.CreateConnection())
             {
@@ -33,9 +34,9 @@ namespace JMSD.PirataRamen.API.Repositories
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            var sql = @"SELECT p.ProductId, p.Name, p.Description, p.Price, p.ImageUrl, c.Name AS Category
-                            FROM Product p
-                            LEFT JOIN Category c 
+            var sql = @"SELECT p.ProductId, p.Name, p.Description, p.Price, p.ImageUrl, c.CategoryId, c.Name AS Category
+                            FROM Products p
+                            LEFT JOIN Categories c 
                             ON c.CategoryId = p.CategoryId
                             WHERE ProductId = @ProductId
                         ";
@@ -47,19 +48,48 @@ namespace JMSD.PirataRamen.API.Repositories
             }
         }
 
-        public Task<Product> CreateProductAsync(Product product)
+        public async Task<int> CreateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            var sql = @"INSERT INTO Products (Name, Description, Price, ImageUrl, CategoryId)
+                VALUES (@Name, @Description, @Price, @ImageUrl, @CategoryId)
+                SELECT CAST(SCOPE_IDENTITY() as int);
+            ";
+
+            using (var connection = _context.CreateConnection())
+            {
+                var result = await connection.ExecuteAsync(sql, product);
+                return result;
+            }
         }
 
-        public Task<Product> UpdateProductAsync(Product product)
+        public async Task<int> UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            var sql = @"UPDATE Products SET 
+                Name = @Name,
+                Description = @Description,
+                Price = @Price,
+                ImageUrl = @ImageUrl,
+                CategoryId = @CategoryId
+                WHERE ProductId = @ProductId
+            ";
+
+            using (var connection = _context.CreateConnection())
+            {
+                var result = await connection.ExecuteAsync(sql, product);
+                return result;
+            }
         }
 
-        public Task<Product> DeleteProductAsync(int id)
+        public async Task<int> DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            var sql = @"DELETE FROM Products
+                WHERE ProductId = @ProductId";
+
+            using (var connection = _context.CreateConnection())
+            {
+                var result = await connection.ExecuteAsync(sql, new {ProductId = id});
+                return result;
+            }
         }
     }
 }

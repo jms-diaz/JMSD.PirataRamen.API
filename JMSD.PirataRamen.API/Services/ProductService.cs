@@ -38,19 +38,43 @@ namespace JMSD.PirataRamen.API.Services
             }
         }
 
-        public async Task<Product> CreateProductAsync(Product product)
+        public async Task<int> CreateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _productRepository.CreateProductAsync(product);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public async Task<Product> UpdateProductAsync(Product product)
+        public async Task<int> UpdateProductAsync(Product product)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _productRepository.UpdateProductAsync(product);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public async Task<Product> DeleteProductAsync(int id)
+        public async Task<int> DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var result = await _productRepository.DeleteProductAsync(id);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
